@@ -15,6 +15,11 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import MovingIcon from "@mui/icons-material/Moving";
 import { BiTrip } from "react-icons/bi";
+import NoCrashIcon from "@mui/icons-material/NoCrash";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import RouteIcon from "@mui/icons-material/Route";
 
 interface BurgerMenuProps {
   isOpen: boolean;
@@ -30,7 +35,7 @@ interface RouteItem {
 }
 
 const routes: RouteItem[] = [
-  { text: "Home", icon: <HomeIcon />, path: "/dashboard" },
+  { text: "Home", icon: <HomeIcon />, path: "/home" },
   {
     text: "Escala de Motoristas",
     icon: <LocalShippingIcon />,
@@ -52,9 +57,39 @@ const routes: RouteItem[] = [
     path: "/daily-trips",
   },
   {
+    text: "Planejamento de veículos",
+    icon: <TbSteeringWheel />,
+    path: "/vehicle-planning",
+  },
+  {
     text: "Cenários",
     icon: <BiTrip />,
     path: "/scenarios",
+  },
+  {
+    text: "Liberação de motoristas",
+    icon: <NoCrashIcon />,
+    path: "/release-driver",
+  },
+  {
+    text: "Relatórios",
+    icon: <AssignmentIcon />,
+    path: "/reports",
+  },
+  {
+    text: "Importação de viagens",
+    icon: <UploadFileIcon />,
+    path: "/import-trips",
+  },
+  {
+    text: "Otimizacão de viagens",
+    icon: <SettingsSuggestIcon />,
+    path: "/trip-optimization",
+  },
+  {
+    text: "Cadastro de rotas",
+    icon: <RouteIcon />,
+    path: "/lines",
   },
 ];
 

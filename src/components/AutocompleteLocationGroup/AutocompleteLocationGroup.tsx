@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable prettier/prettier */
+import React, { SyntheticEvent } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -6,7 +7,17 @@ import { useLocationGroup } from "@/hooks/useLocationGroup";
 import debounce from "debounce";
 import { LocationGroup } from "@/interfaces/trip";
 
-export function AutocompleteLocationGroup() {
+export function AutocompleteLocationGroup({
+  name = "locationGroupCode",
+  keyCode = "code",
+  onChange,
+  label = "Cód da localização",
+}: {
+  name?: string;
+  keyCode?: keyof LocationGroup;
+  onChange?: (value: LocationGroup | null) => void;
+  label?: string;
+}) {
   const {
     control,
     watch,
@@ -16,12 +27,23 @@ export function AutocompleteLocationGroup() {
 
   const { locationGroups, error } = useLocationGroup({
     pageSize: 10,
-    code: watch("locationGroupCode"),
+    code: watch(name),
   });
+
+  const handleChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: LocationGroup | null,
+  ) => {
+    if (onChange) {
+      onChange(value);
+    } else {
+      setValue(name, value?.[keyCode] || "");
+    }
+  };
 
   return (
     <Controller
-      name="locationGroupCode"
+      name={name}
       control={control}
       render={({ field }) => (
         <Autocomplete
@@ -29,19 +51,17 @@ export function AutocompleteLocationGroup() {
           forcePopupIcon={false}
           options={locationGroups || []}
           loadingText="Carregando..."
-          defaultValue={{ code: field.value } as LocationGroup}
+          defaultValue={{ [keyCode]: field.value ?? "" } as LocationGroup}
           isOptionEqualToValue={(option: LocationGroup, value: LocationGroup) =>
-            option.code === value.code
+            option[keyCode] === value[keyCode]
           }
-          onChange={(_, value) =>
-            setValue("locationGroupCode", value?.code || "")
-          }
+          onChange={handleChange}
           noOptionsText={
             !field.value
               ? "Digite o código"
               : !locationGroups && !error
-              ? "Carregando..."
-              : "Nenhum resultado encontrado"
+                ? "Carregando..."
+                : "Nenhum resultado encontrado"
           }
           getOptionLabel={(option: LocationGroup) =>
             option.description
@@ -55,7 +75,7 @@ export function AutocompleteLocationGroup() {
               onChange={debounce(field.onChange, 300)}
               variant="outlined"
               fullWidth
-              label="Cód da localização"
+              label={label}
               error={!!errors[field.name]}
               helperText={errors[field.name]?.message?.toString()}
             />

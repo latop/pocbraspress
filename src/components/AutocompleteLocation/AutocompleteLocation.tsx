@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable prettier/prettier */
+import React, { SyntheticEvent } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -6,15 +7,19 @@ import { useLocation } from "@/hooks/useLocation";
 import debounce from "debounce";
 import { Location } from "@/interfaces/trip";
 
+export interface AutocompleteLocationProps {
+  name?: string;
+  label?: string;
+  keyCode?: keyof Location;
+  onChange?: (value: Location | null) => void;
+}
+
 export function AutocompleteLocation({
   name = "locationCode",
   label = "Cód. localização",
   keyCode = "code",
-}: {
-  name?: string;
-  label?: string;
-  keyCode?: keyof Location;
-}) {
+  onChange,
+}: AutocompleteLocationProps) {
   const {
     control,
     watch,
@@ -27,6 +32,16 @@ export function AutocompleteLocation({
     pageSize: 10,
     code: isDirty ? watch(name) : "",
   });
+  const handleChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: Location | null,
+  ) => {
+    if (onChange) {
+      onChange(value);
+    } else {
+      setValue(name, value?.[keyCode] || "");
+    }
+  };
 
   return (
     <Controller
@@ -42,15 +57,13 @@ export function AutocompleteLocation({
           isOptionEqualToValue={(option: Location, value: Location) =>
             option[keyCode] === value[keyCode]
           }
-          onChange={(_, value) => {
-            setValue(name, value?.[keyCode] || "");
-          }}
+          onChange={handleChange}
           noOptionsText={
             !field.value
               ? "Digite o código"
               : !locations && !error
-              ? "Carregando..."
-              : "Nenhum resultado encontrado"
+                ? "Carregando..."
+                : "Nenhum resultado encontrado"
           }
           getOptionLabel={(option: Location) => option.code}
           renderInput={(params) => (

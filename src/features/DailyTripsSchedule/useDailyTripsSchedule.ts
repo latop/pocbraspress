@@ -5,6 +5,9 @@ interface TripsGanttSearchParams {
   startDate?: string;
   endDate?: string;
   fleetGroupCode?: string;
+  locationGroupCode?: string;
+  licensePlate?: string;
+  showTruckAssignment?: string;
 }
 
 export function useDailyTripsSchedule() {
@@ -15,6 +18,9 @@ export function useDailyTripsSchedule() {
       "startDate",
       "endDate",
       "fleetGroupCode",
+      "locationGroupCode",
+      "licensePlate",
+      "showTruckAssignment",
     ];
 
     paramKeys.forEach((key) => {

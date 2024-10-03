@@ -131,11 +131,11 @@ export function useTimelineTrips() {
   const { groups, items } = useMemo(() => {
     const groupsMap = new Map();
     const itemsMap = new Map();
-    drivers?.forEach((driver: DriverSchedule) => {
+    drivers?.forEach((driver: DriverSchedule, i: number) => {
       if (!groupsMap.has(driver?.driverId)) {
         groupsMap.set(driver.driverId, {
           id: driver.driverId,
-          title: driver.driverName,
+          title: `${driver.driverName} - ${i}`,
         });
       }
     });

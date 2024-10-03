@@ -14,6 +14,9 @@ interface FormFields {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
   fleetGroupCode?: string;
+  locationGroupCode?: string;
+  licensePlate?: string;
+  showTruckAssignment?: boolean;
 }
 
 const dateOrDayjsSchema = z.custom(
@@ -28,10 +31,14 @@ const schema = z
     startDate: dateOrDayjsSchema,
     endDate: dateOrDayjsSchema,
     fleetGroupCode: z.string().optional(),
+    locationGroupCode: z.string().optional(),
+    licensePlate: z.string().optional(),
+    showTruckAssignment: z.boolean().optional(),
   })
   .refine(
     (data) => {
       const { startDate, endDate } = data;
+
       if (dayjs(startDate as Dayjs | Date).isAfter(endDate as Dayjs | Date)) {
         return false;
       }
@@ -63,6 +70,9 @@ export function useDailyTripsByPeriodFilterBar() {
         ? dayjs(params.get("endDate"))
         : dayjs().add(7, "days"),
       fleetGroupCode: params.get("fleetGroupCode") || "",
+      locationGroupCode: params.get("locationGroupCode") || "",
+      licensePlate: params.get("licensePlate") || "",
+      showTruckAssignment: Boolean(params.get("showTruckAssignment")) || false,
     },
   });
 

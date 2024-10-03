@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -9,9 +9,11 @@ import { FleetGroup } from "@/interfaces/vehicle";
 export function AutocompleteFleetGroup({
   name = "fleetGroupCode",
   keyCode = "code",
+  onChange,
 }: {
   name?: string;
   keyCode?: keyof FleetGroup;
+  onChange?: (value: FleetGroup | null) => void;
 }) {
   const {
     control,
@@ -27,6 +29,19 @@ export function AutocompleteFleetGroup({
     code: isDirty ? watch(name) : "",
   });
 
+  const handleChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: FleetGroup | null,
+  ) => {
+    if (onChange) {
+      onChange(value);
+    } else {
+      setValue(name, value?.[keyCode] || "");
+      setValue("fleetGroupId", value?.id || "");
+      setValue("fleetGroupCode", value?.code || "");
+    }
+  };
+
   return (
     <Controller
       name={name}
@@ -37,11 +52,11 @@ export function AutocompleteFleetGroup({
           forcePopupIcon={false}
           options={fleetGroups || []}
           loadingText="Carregando..."
-          defaultValue={{ code: field.value ?? "" } as FleetGroup}
+          defaultValue={{ [keyCode]: field.value ?? "" } as FleetGroup}
           isOptionEqualToValue={(option: FleetGroup, value: FleetGroup) =>
             option[keyCode] === value[keyCode]
           }
-          onChange={(_, value) => setValue(name, value?.[keyCode] || "")}
+          onChange={handleChange}
           noOptionsText={
             !field.value
               ? "Digite o código"
