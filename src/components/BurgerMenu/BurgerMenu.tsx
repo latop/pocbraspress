@@ -19,7 +19,6 @@ import NoCrashIcon from "@mui/icons-material/NoCrash";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import RouteIcon from "@mui/icons-material/Route";
 
 interface BurgerMenuProps {
   isOpen: boolean;
@@ -85,11 +84,6 @@ const routes: RouteItem[] = [
     text: "Otimizacão de viagens",
     icon: <SettingsSuggestIcon />,
     path: "/trip-optimization",
-  },
-  {
-    text: "Cadastro de rotas",
-    icon: <RouteIcon />,
-    path: "/lines",
   },
 ];
 

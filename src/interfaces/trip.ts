@@ -13,7 +13,6 @@ export interface Location {
 export interface TripType {
   code: string;
   description: string;
-  id: string;
 }
 
 export interface FetchOptmizedTripsData {
