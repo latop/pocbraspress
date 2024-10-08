@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable prettier/prettier */
+import React, { SyntheticEvent } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -10,10 +11,12 @@ export function AutocompleteTripType({
   name = "tripTypeCode",
   label = "Tipo de viagem",
   keyCode = "code",
+  onChange,
 }: {
   name?: string;
   label?: string;
   keyCode?: keyof TripType;
+  onChange?: (value: TripType | null) => void;
 }) {
   const {
     control,
@@ -21,6 +24,17 @@ export function AutocompleteTripType({
     setValue,
     formState: { errors, dirtyFields },
   } = useFormContext();
+
+  const handleChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: TripType | null,
+  ) => {
+    if (onChange) {
+      onChange(value);
+    } else {
+      setValue(name, value?.[keyCode] || "");
+    }
+  };
 
   const isDirty = dirtyFields[name];
   const { tripTypes, error } = useTripType({
@@ -42,15 +56,13 @@ export function AutocompleteTripType({
           isOptionEqualToValue={(option: TripType, value: TripType) =>
             option[keyCode] === value[keyCode]
           }
-          onChange={(_, value) => {
-            setValue(name, value?.[keyCode] || "");
-          }}
+          onChange={handleChange}
           noOptionsText={
             !field.value
               ? "Digite o código"
               : !tripTypes && !error
-              ? "Carregando..."
-              : "Nenhum resultado encontrado"
+                ? "Carregando..."
+                : "Nenhum resultado encontrado"
           }
           getOptionLabel={(option: TripType) => option.code}
           renderInput={(params) => (

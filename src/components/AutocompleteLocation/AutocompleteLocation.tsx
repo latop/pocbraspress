@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { TextField } from "@mui/material";
@@ -10,6 +11,7 @@ export interface AutocompleteLocationProps {
   name?: string;
   label?: string;
   keyCode?: keyof Location;
+  onChange?: (value: Location | null) => void;
 }
 
 export function AutocompleteLocation({
@@ -51,8 +53,8 @@ export function AutocompleteLocation({
             !field.value
               ? "Digite o código"
               : !locations && !error
-              ? "Carregando..."
-              : "Nenhum resultado encontrado"
+                ? "Carregando..."
+                : "Nenhum resultado encontrado"
           }
           getOptionLabel={(option: Location) => option.code}
           renderInput={(params) => (
