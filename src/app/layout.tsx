@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Sigla Cargo - Pepsico",
+  title: "Sigla Cargo - Braspress",
 };
 
 import { Providers } from "@/providers";
